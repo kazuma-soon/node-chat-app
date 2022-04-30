@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
+require('dotenv').config();
 // pg -->
 const { Client } = require('pg')
 const client = new Client({
-  user: 'postgres',
-  database: 'node_chat_app',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+  // user: 'postgres',
+  // database: 'node_chat_app',
+  // port: 5432,
 })
 client.connect()
 // <--pg
