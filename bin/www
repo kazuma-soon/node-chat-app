@@ -8,6 +8,16 @@ var app = require('../app');
 var debug = require('debug')('nodechatapp:server');
 var http = require('http');
 
+// pg -->
+const { Client } = require('pg')
+const client = new Client({
+  user: 'postgres',
+  database: 'node_chat_app',
+  port: 5432,
+})
+client.connect()
+// <--pg
+
 /**
  * Get port from environment and store in Express.
  */
@@ -28,8 +38,12 @@ const io = new Server(server);
 io.on('connection', (socket) => {
   console.log('a user connected');
   socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-    io.emit('receiveMessage', msg);
+    client
+      .query('INSERT INTO chats (comment) VALUES ($1)', [msg])
+      .then(results => {
+	io.emit('receiveMessage', msg);
+      })
+      .catch(err => comsole.error(err))
   });
 });
 

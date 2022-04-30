@@ -13,7 +13,18 @@ client.connect()
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Top | NodeChatApp' });
+  client
+    .query('SELECT * FROM chats LIMIT 20')
+    .then(results => {
+      res.render('index.ejs', { 
+	title: 'Top | NodeChatApp',
+        comments: results.rows,
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.render('index.ejs', { title: 'Top | NodeChatApp' });
+    })
 });
 
 router.post('/', (req, res, next) => {

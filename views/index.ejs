@@ -5,7 +5,11 @@
     <link rel="stylesheet" href="stylesheets/style.css">
   </head>
   <body>
-    <ul id="messages"></ul>
+    <ul id="messages">
+      <% comments.forEach(comment => { %>
+        <li><%= comment.comment %></li>
+      <% }) %>
+    </ul>
     
     <form id="form" action="/" method="post">
       <input id="input" autocomplete="off" /><button>Send</button>
